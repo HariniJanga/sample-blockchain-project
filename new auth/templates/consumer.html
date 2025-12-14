@@ -1,0 +1,645 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consumer Portal - Product Verification</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+            .header h1 {
+                font-size: 2.8rem;
+                margin-bottom: 10px;
+            }
+
+            .header p {
+                font-size: 1.3rem;
+                opacity: 0.9;
+            }
+
+        .main-content {
+            padding: 30px;
+        }
+
+        .section {
+            padding: 30px;
+            margin: 25px 0;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border-left: 5px solid #27ae60;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+            .section h2 {
+                color: #2c3e50;
+                margin-bottom: 20px;
+                font-size: 1.8rem;
+            }
+
+        .verification-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .option-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            border: 2px solid #27ae60;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+            .option-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 10px 25px rgba(39, 174, 96, 0.3);
+            }
+
+            .option-card.active {
+                background: #d5f4e6;
+                border-color: #1e8449;
+            }
+
+        .verification-form {
+            text-align: center;
+            padding: 30px;
+        }
+
+        input {
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            width: 100%;
+            max-width: 400px;
+            margin-bottom: 20px;
+        }
+
+            input:focus {
+                outline: none;
+                border-color: #27ae60;
+                box-shadow: 0 0 0 3px rgba(39, 174, 96, 0.1);
+            }
+
+        button {
+            background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 16px;
+            margin: 10px 5px;
+        }
+
+            button:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 10px 20px rgba(39, 174, 96, 0.3);
+            }
+
+            button:disabled {
+                background: #bdc3c7;
+                cursor: not-allowed;
+                transform: none;
+                box-shadow: none;
+            }
+
+        .status {
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        .warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+
+        .product-details {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            border: 3px solid #27ae60;
+            margin: 20px 0;
+            box-shadow: 0 10px 25px rgba(39, 174, 96, 0.2);
+        }
+
+        .verification-badge {
+            display: inline-block;
+            padding: 15px 25px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 18px;
+            margin: 20px 0;
+        }
+
+        .authentic {
+            background: #d4edda;
+            color: #155724;
+            border: 2px solid #27ae60;
+        }
+
+        .fake {
+            background: #f8d7da;
+            color: #721c24;
+            border: 2px solid #dc3545;
+        }
+
+        .product-info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .info-item {
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #27ae60;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .camera-container {
+            background: #2c3e50;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        #videoElement {
+            width: 100%;
+            max-width: 400px;
+            border-radius: 10px;
+            margin: 10px 0;
+        }
+
+        @media (max-width: 768px) {
+            .verification-options {
+                grid-template-columns: 1fr;
+            }
+
+            .product-info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>👥 Consumer Portal</h1>
+            <p>Product Verification & Authenticity Check</p>
+            <div style="margin-top: 20px;">
+                <a href="/" style="color: white; text-decoration: none; background: rgba(255,255,255,0.2); padding: 10px 20px; border-radius: 5px;">🏭 Manufacturer Portal</a>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <!-- Verification Method Selection -->
+            <div class="section">
+                <h2>🔍 Choose Verification Method</h2>
+                <div class="verification-options">
+                    <div class="option-card" id="qrOption" onclick="selectOption('qr')">
+                        <h3>📱 Scan QR Code</h3>
+                        <p>Use your camera to scan the product's QR code</p>
+                        <div style="font-size: 4rem; margin: 20px 0;">📷</div>
+                    </div>
+                    <div class="option-card" id="manualOption" onclick="selectOption('manual')">
+                        <h3>⌨️ Manual Entry</h3>
+                        <p>Enter the product ID manually</p>
+                        <div style="font-size: 4rem; margin: 20px 0;">🔢</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- QR Scanner Section -->
+            <div class="section hidden" id="qrSection">
+                <h2>📱 QR Code Scanner</h2>
+                <div class="camera-container">
+                    <video id="videoElement" autoplay style="display: none;"></video>
+                    <div id="cameraStatus">Click "Start Camera" to begin scanning</div>
+                    <div style="margin: 20px 0;">
+                        <button id="startCamera" onclick="startCamera()">📷 Start Camera</button>
+                        <button id="stopCamera" onclick="stopCamera()" disabled>⏹️ Stop Camera</button>
+                    </div>
+                    <div id="qrStatus"></div>
+                </div>
+            </div>
+
+            <!-- Manual Entry Section -->
+            <div class="section hidden" id="manualSection">
+                <h2>⌨️ Manual Product Verification</h2>
+                <div class="verification-form">
+                    <input type="number" id="productIdInput" placeholder="Enter Product ID (e.g., 1, 2, 3...)" min="1">
+                    <br>
+                    <button onclick="verifyProduct()">🔍 Verify Product</button>
+                </div>
+            </div>
+
+            <!-- Verification Results -->
+            <div class="section hidden" id="resultsSection">
+                <h2>✅ Verification Results</h2>
+                <div id="verificationResults"></div>
+            </div>
+
+            <!-- Demo Section -->
+            <div class="section">
+                <h2>🎯 Demo Instructions</h2>
+                <div style="background: white; padding: 25px; border-radius: 15px;">
+                    <h3>How to Test:</h3>
+                    <ol style="margin: 20px 0; padding-left: 30px; line-height: 1.8;">
+                        <li><strong>Manual Test:</strong> Click "Manual Entry" → Enter ID "1" → Click "Verify Product"</li>
+                        <li><strong>QR Test:</strong> Click "Scan QR Code" → Use camera on QR code from manufacturer portal</li>
+                        <li><strong>Create Products:</strong> Go to manufacturer portal first to register products</li>
+                    </ol>
+
+                    <h3 style="margin-top: 30px;">🔒 What We Verify:</h3>
+                    <ul style="margin: 20px 0; padding-left: 30px; line-height: 1.8;">
+                        <li>✅ <strong>Product Registration:</strong> Product exists in our database</li>
+                        <li>✅ <strong>Manufacturer Details:</strong> Verified manufacturer information</li>
+                        <li>✅ <strong>Product Status:</strong> Active/inactive status</li>
+                        <li>✅ <strong>Registration Time:</strong> When product was registered</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let selectedMethod = null;
+        let videoStream = null;
+        let scanning = false;
+
+        // Mock products database (in real app, this comes from backend)
+        const mockProducts = {
+            1: {
+                id: 1,
+                name: "iPhone 15 Pro Max",
+                manufacturer: "Apple Inc.",
+                batchNumber: "APL-2024-001",
+                serialNumber: "SN123456789",
+                manufacturingDate: "2024-07-17T10:30:00Z",
+                isActive: true,
+                registrationTime: Date.now() - 86400000 // 1 day ago
+            },
+            2: {
+                id: 2,
+                name: "Samsung Galaxy S24",
+                manufacturer: "Samsung Electronics",
+                batchNumber: "SAM-2024-002",
+                serialNumber: "SN987654321",
+                manufacturingDate: "2024-07-16T14:20:00Z",
+                isActive: true,
+                registrationTime: Date.now() - 172800000 // 2 days ago
+            }
+        };
+
+        // Select verification method
+        function selectOption(method) {
+            selectedMethod = method;
+
+            // Update UI
+            document.querySelectorAll('.option-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            document.getElementById(method + 'Option').classList.add('active');
+
+            // Show/hide sections
+            document.getElementById('qrSection').classList.toggle('hidden', method !== 'qr');
+            document.getElementById('manualSection').classList.toggle('hidden', method !== 'manual');
+
+            if (method === 'manual') {
+                document.getElementById('productIdInput').focus();
+            }
+
+            // Hide results
+            document.getElementById('resultsSection').classList.add('hidden');
+        }
+
+        // Start camera for QR scanning
+        async function startCamera() {
+            try {
+                showStatus('cameraStatus', '📷 Starting camera...', 'info');
+
+                if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                    showStatus('cameraStatus', '❌ Camera not supported on this device/browser', 'error');
+                    return;
+                }
+
+                videoStream = await navigator.mediaDevices.getUserMedia({
+                    video: { facingMode: 'environment' } // Prefer back camera
+                });
+
+                const video = document.getElementById('videoElement');
+                video.srcObject = videoStream;
+                video.style.display = 'block';
+
+                document.getElementById('startCamera').disabled = true;
+                document.getElementById('stopCamera').disabled = false;
+
+                showStatus('cameraStatus', '✅ Camera started! Point at QR code to scan', 'success');
+                showStatus('qrStatus', '🔍 Looking for QR codes...', 'info');
+
+                // Note: For full QR scanning, you'd need jsQR library
+                // For demo, we'll simulate QR detection
+                setTimeout(() => {
+                    if (scanning) {
+                        simulateQRDetection();
+                    }
+                }, 3000);
+
+                scanning = true;
+
+            } catch (error) {
+                console.error('Camera error:', error);
+                showStatus('cameraStatus', '❌ Camera access denied or not available', 'error');
+            }
+        }
+
+        // Stop camera
+        function stopCamera() {
+            scanning = false;
+
+            if (videoStream) {
+                videoStream.getTracks().forEach(track => track.stop());
+                videoStream = null;
+            }
+
+            const video = document.getElementById('videoElement');
+            video.style.display = 'none';
+
+            document.getElementById('startCamera').disabled = false;
+            document.getElementById('stopCamera').disabled = true;
+
+            showStatus('cameraStatus', '⏹️ Camera stopped', 'info');
+            showStatus('qrStatus', '', 'info');
+        }
+
+        // Simulate QR code detection (for demo)
+        function simulateQRDetection() {
+            if (!scanning) return;
+
+            // Simulate finding a QR code
+            const randomProductId = Math.random() > 0.5 ? '1' : '2';
+            showStatus('qrStatus', '✅ QR Code detected! Processing...', 'success');
+
+            setTimeout(() => {
+                if (scanning) {
+                    stopCamera();
+                    document.getElementById('productIdInput').value = randomProductId;
+                    verifyProduct(randomProductId);
+                }
+            }, 1000);
+        }
+
+        // Verify product
+        async function verifyProduct(productId = null) {
+            if (!productId) {
+                productId = document.getElementById('productIdInput').value;
+            }
+
+            if (!productId) {
+                showVerificationStatus('❌ Please enter a product ID', 'error');
+                return;
+            }
+
+            try {
+                showVerificationStatus('🔍 Verifying product...', 'info');
+
+                // Simulate API call delay
+                await new Promise(resolve => setTimeout(resolve, 1000));
+
+                // Check if product exists (in real app, this would be an API call)
+                const product = mockProducts[productId];
+
+                if (!product) {
+                    showVerificationResult(null, productId);
+                    return;
+                }
+
+                showVerificationResult(product, productId);
+
+            } catch (error) {
+                showVerificationStatus('❌ Verification failed: ' + error.message, 'error');
+                console.error('Verification error:', error);
+            }
+        }
+
+        // Show verification result
+        function showVerificationResult(product, productId) {
+            const resultsSection = document.getElementById('resultsSection');
+            const verificationResults = document.getElementById('verificationResults');
+
+            resultsSection.classList.remove('hidden');
+
+            if (!product) {
+                // Product not found
+                verificationResults.innerHTML = `
+                        <div class="verification-badge fake">
+                            ❌ PRODUCT NOT FOUND
+                        </div>
+                        <div class="status error">
+                            Product ID ${productId} was not found in our database. This could indicate:
+                            <ul style="margin: 15px 0; padding-left: 30px;">
+                                <li>The product is counterfeit</li>
+                                <li>The QR code is damaged or fake</li>
+                                <li>The product ID was entered incorrectly</li>
+                            </ul>
+                            <strong>⚠️ DO NOT PURCHASE THIS PRODUCT</strong>
+                        </div>
+                    `;
+                resultsSection.scrollIntoView({ behavior: 'smooth' });
+                return;
+            }
+
+            // Product found and verified
+            verificationResults.innerHTML = `
+                    <div class="verification-badge authentic">
+                        ✅ AUTHENTIC PRODUCT
+                    </div>
+                    <div class="status success">
+                        This product has been verified as authentic and registered by the manufacturer.
+                    </div>
+
+                    <div class="product-details">
+                        <h3>📦 Verified Product Details</h3>
+
+                        <div class="product-info-grid">
+                            <div class="info-item">
+                                <strong>🆔 Product ID:</strong><br>
+                                ${product.id}
+                            </div>
+                            <div class="info-item">
+                                <strong>📱 Product Name:</strong><br>
+                                ${product.name}
+                            </div>
+                            <div class="info-item">
+                                <strong>🏭 Manufacturer:</strong><br>
+                                ${product.manufacturer}
+                            </div>
+                            <div class="info-item">
+                                <strong>📦 Batch Number:</strong><br>
+                                ${product.batchNumber}
+                            </div>
+                            <div class="info-item">
+                                <strong>🔢 Serial Number:</strong><br>
+                                ${product.serialNumber || 'N/A'}
+                            </div>
+                            <div class="info-item">
+                                <strong>📅 Manufacturing Date:</strong><br>
+                                ${new Date(product.manufacturingDate).toLocaleDateString()}
+                            </div>
+                        </div>
+
+                        <div style="background: #e8f5e8; padding: 20px; border-radius: 10px; margin: 20px 0; border: 2px solid #27ae60;">
+                            <h4>🔗 Verification Details</h4>
+                            <p><strong>Status:</strong> ${product.isActive ? '✅ Active' : '❌ Inactive'}</p>
+                            <p><strong>Registration Time:</strong> ${new Date(product.registrationTime).toLocaleString()}</p>
+                            <p><strong>Verification Time:</strong> ${new Date().toLocaleString()}</p>
+                        </div>
+
+                        <div style="text-align: center; margin-top: 30px;">
+                            <button onclick="verifyAnother()">🔍 Verify Another Product</button>
+                            <button onclick="shareVerification(${product.id})">📤 Share Verification</button>
+                        </div>
+                    </div>
+                `;
+
+            // Scroll to results
+            resultsSection.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Verify another product
+        function verifyAnother() {
+            document.getElementById('resultsSection').classList.add('hidden');
+            document.getElementById('productIdInput').value = '';
+
+            if (selectedMethod === 'manual') {
+                document.getElementById('productIdInput').focus();
+            }
+        }
+
+        // Share verification result
+        function shareVerification(productId) {
+            const shareUrl = `${window.location.origin}/consumer?productId=${productId}`;
+
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Product Verification Result',
+                    text: 'Check out this verified product!',
+                    url: shareUrl
+                });
+            } else {
+                // Fallback: copy to clipboard
+                navigator.clipboard.writeText(shareUrl).then(() => {
+                    alert('✅ Verification link copied to clipboard!');
+                }).catch(() => {
+                    prompt('Copy this verification link:', shareUrl);
+                });
+            }
+        }
+
+        // Show status messages
+        function showVerificationStatus(message, type) {
+            const resultsSection = document.getElementById('resultsSection');
+            const verificationResults = document.getElementById('verificationResults');
+
+            resultsSection.classList.remove('hidden');
+            verificationResults.innerHTML = `<div class="status ${type}">${message}</div>`;
+        }
+
+        function showStatus(elementId, message, type) {
+            const element = document.getElementById(elementId);
+            element.innerHTML = message ? `<div class="status ${type}">${message}</div>` : '';
+        }
+
+        // Check for product ID in URL parameters
+        function checkUrlParams() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = urlParams.get('productId');
+
+            if (productId) {
+                // Auto-select manual method and verify
+                selectOption('manual');
+                document.getElementById('productIdInput').value = productId;
+                setTimeout(() => verifyProduct(productId), 1000);
+            }
+        }
+
+        // Initialize page
+        window.onload = function () {
+            checkUrlParams();
+        };
+
+        // Cleanup on page unload
+        window.onbeforeunload = function () {
+            if (videoStream) {
+                stopCamera();
+            }
+        };
+    </script>
+</body>
+</html>

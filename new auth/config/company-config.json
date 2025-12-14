@@ -1,0 +1,28 @@
+{
+	"company": {
+		"name": "Your Company Name",
+		"industry": "electronics",
+		"website": "https://www.yourcompany.com",
+		"support_email": "support@yourcompany.com",
+		"logo_url": "/static/images/company-logo.png"
+	},
+	"branding": {
+		"primary_color": "#1a73e8",
+		"secondary_color": "#34a853",
+		"accent_color": "#ea4335",
+		"background_color": "#ffffff",
+		"text_color": "#333333"
+	},
+	"features": {
+		"qr_generation": true,
+		"blockchain_integration": true,
+		"analytics": true,
+		"mobile_support": true,
+		"api_access": true
+	},
+	"compliance": {
+		"standards": [ "ISO 9001", "CE Marking" ],
+		"required_fields": [ "batch_number", "serial_number", "manufacturing_date" ],
+		"retention_period": 7
+	}
+}

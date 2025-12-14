@@ -1,0 +1,405 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blockchain Product Authentication - Manufacturer Portal</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            min-height: 100vh; padding: 20px;
+        }
+        .container { 
+            max-width: 900px; margin: 0 auto; 
+            background: white; border-radius: 20px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        .header { 
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white; padding: 40px; text-align: center;
+        }
+        .header h1 { font-size: 2.8rem; margin-bottom: 10px; }
+        .header p { font-size: 1.3rem; opacity: 0.9; }
+        .main-content { padding: 30px; }
+        .section { 
+            padding: 30px; margin: 25px 0; 
+            background: #f8f9fa; border-radius: 15px;
+            border-left: 5px solid #e74c3c;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .section h2 { color: #2c3e50; margin-bottom: 20px; font-size: 1.8rem; }
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+        input, textarea, select { 
+            padding: 15px; border: 2px solid #ddd; 
+            border-radius: 10px; font-size: 16px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #e74c3c;
+            box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+        }
+        button { 
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white; cursor: pointer; font-weight: bold;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 16px;
+            margin: 10px 5px;
+        }
+        button:hover { 
+            transform: translateY(-3px); 
+            box-shadow: 0 10px 20px rgba(231, 76, 60, 0.3);
+        }
+        .status { 
+            padding: 20px; margin: 15px 0; border-radius: 10px; 
+            font-weight: bold; font-size: 16px;
+        }
+        .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .info { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+        .blockchain-status {
+            background: linear-gradient(135deg, #1a73e8, #4285f4);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .tx-hash {
+            font-family: monospace;
+            background: #f0f0f0;
+            padding: 10px;
+            border-radius: 5px;
+            word-break: break-all;
+            border: 1px solid #ddd;
+            margin: 10px 0;
+        }
+        .blockchain-info {
+            background: #e8f5e8;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border: 2px solid #27ae60;
+        }
+        .nav-link {
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 10px;
+            transition: background 0.3s;
+        }
+        .nav-link:hover {
+            background: #2980b9;
+        }
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            .header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔗 Blockchain Product Authentication</h1>
+            <p>Manufacturer Portal - Decentralized Product Registration</p>
+            <div style="margin-top: 20px;">
+                <a href="/consumer" class="nav-link">👥 Consumer Verification Portal</a>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <!-- Blockchain Status -->
+            <div class="section">
+                <h2>⛓️ Blockchain Status</h2>
+                <div class="blockchain-status" id="blockchainStatus">
+                    <div id="statusContent">Loading blockchain status...</div>
+                </div>
+                <button onclick="checkBlockchainStatus()">🔄 Refresh Status</button>
+                <button onclick="reconnectBlockchain()">🔗 Reconnect Blockchain</button>
+            </div>
+
+            <!-- Product Registration -->
+            <div class="section">
+                <h2>📝 Register Product on Blockchain</h2>
+                <form id="productForm">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="productName">Product Name *</label>
+                            <input type="text" id="productName" placeholder="e.g., iPhone 15 Pro Max" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="manufacturer">Manufacturer *</label>
+                            <input type="text" id="manufacturer" placeholder="e.g., Apple Inc." required>
+                        </div>
+                        <div class="form-group">
+                            <label for="batchNumber">Batch Number *</label>
+                            <input type="text" id="batchNumber" placeholder="e.g., APL-2024-001" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="serialNumber">Serial Number</label>
+                            <input type="text" id="serialNumber" placeholder="e.g., SN123456789">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group" style="margin-bottom: 20px;">
+                        <label for="productDescription">Product Description</label>
+                        <textarea id="productDescription" rows="3" placeholder="Detailed product description..."></textarea>
+                    </div>
+
+                    <button type="submit">⛓️ Register on Blockchain</button>
+                </form>
+                
+                <div id="registrationResult"></div>
+            </div>
+
+            <!-- Instructions -->
+            <div class="section">
+                <h2>📖 How It Works</h2>
+                <div style="background: white; padding: 25px; border-radius: 15px;">
+                    <h3>🔗 Blockchain Integration:</h3>
+                    <ol style="margin: 20px 0; padding-left: 30px; line-height: 1.8;">
+                        <li><strong>Immutable Storage:</strong> Product data stored permanently on blockchain</li>
+                        <li><strong>Transaction Hash ID:</strong> Each product gets a unique blockchain transaction hash</li>
+                        <li><strong>Global Verification:</strong> Anyone can verify product authenticity</li>
+                        <li><strong>Cryptographic Security:</strong> Mathematically proven authenticity</li>
+                    </ol>
+                    
+                    <h3 style="margin-top: 30px;">📋 Setup Requirements:</h3>
+                    <ul style="margin: 20px 0; padding-left: 30px; line-height: 1.8;">
+                        <li>✅ <strong>Ganache Running:</strong> <code>ganache-cli --deterministic --accounts 10</code></li>
+                        <li>✅ <strong>Web3 Installed:</strong> <code>pip install web3</code></li>
+                        <li>✅ <strong>Blockchain Service:</strong> blockchain_service.py file created</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let blockchainConnected = false;
+
+        // Check blockchain status
+        async function checkBlockchainStatus() {
+            try {
+                showStatus('statusContent', 'Checking blockchain connection...', 'info');
+                
+                const response = await fetch('/api/blockchain/status');
+                const status = await response.json();
+                
+                const statusContent = document.getElementById('statusContent');
+                
+                if (status.connected) {
+                    blockchainConnected = true;
+                    statusContent.innerHTML = `
+                        <h3>✅ Blockchain Connected</h3>
+                        <p><strong>Network:</strong> ${status.network}</p>
+                        <p><strong>Current Block:</strong> ${status.current_block}</p>
+                        <p><strong>Account:</strong> ${status.account}</p>
+                        <p><strong>Balance:</strong> ${status.balance} ETH</p>
+                    `;
+                } else {
+                    blockchainConnected = false;
+                    statusContent.innerHTML = `
+                        <h3>❌ Blockchain Disconnected</h3>
+                        <p><strong>Error:</strong> ${status.error || 'Cannot connect to Ganache'}</p>
+                        <p><strong>Solution:</strong></p>
+                        <ol>
+                            <li>Start Ganache: <code>ganache-cli --deterministic --accounts 10</code></li>
+                            <li>Make sure it's running on port 8545</li>
+                            <li>Click "Reconnect Blockchain" button</li>
+                        </ol>
+                    `;
+                }
+            } catch (error) {
+                blockchainConnected = false;
+                document.getElementById('statusContent').innerHTML = `
+                    <h3>❌ Connection Error</h3>
+                    <p><strong>Error:</strong> ${error.message}</p>
+                    <p><strong>Make sure:</strong></p>
+                    <ul>
+                        <li>Ganache is running</li>
+                        <li>blockchain_service.py exists</li>
+                        <li>Web3 is installed</li>
+                    </ul>
+                `;
+            }
+        }
+
+        // Reconnect to blockchain
+        async function reconnectBlockchain() {
+            try {
+                showStatus('statusContent', 'Reconnecting to blockchain...', 'info');
+                
+                const response = await fetch('/api/blockchain/reconnect', {
+                    method: 'POST'
+                });
+                const result = await response.json();
+                
+                if (result.success) {
+                    showStatus('statusContent', '✅ Reconnection successful!', 'success');
+                    setTimeout(checkBlockchainStatus, 1000);
+                } else {
+                    showStatus('statusContent', `❌ Reconnection failed: ${result.error}`, 'error');
+                }
+            } catch (error) {
+                showStatus('statusContent', `❌ Reconnection error: ${error.message}`, 'error');
+            }
+        }
+
+        // Register product on blockchain
+        document.getElementById('productForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            if (!blockchainConnected) {
+                alert('❌ Please connect to blockchain first');
+                checkBlockchainStatus();
+                return;
+            }
+
+            const productData = {
+                name: document.getElementById('productName').value,
+                manufacturer: document.getElementById('manufacturer').value,
+                batchNumber: document.getElementById('batchNumber').value,
+                serialNumber: document.getElementById('serialNumber').value,
+                description: document.getElementById('productDescription').value
+            };
+
+            // Validate required fields
+            if (!productData.name || !productData.manufacturer || !productData.batchNumber) {
+                alert('❌ Please fill in all required fields (marked with *)');
+                return;
+            }
+
+            try {
+                showStatus('registrationResult', '⛓️ Registering on blockchain...', 'info');
+
+                const response = await fetch('/api/products', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(productData)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    showRegistrationSuccess(result);
+                    document.getElementById('productForm').reset();
+                    checkBlockchainStatus(); // Update blockchain status
+                } else {
+                    showStatus('registrationResult', `❌ Registration failed: ${result.error}`, 'error');
+                }
+            } catch (error) {
+                showStatus('registrationResult', `❌ Error: ${error.message}`, 'error');
+            }
+        });
+
+        function showRegistrationSuccess(result) {
+            const resultHTML = `
+                <div class="blockchain-info">
+                    <h3>✅ Product Registered on Blockchain!</h3>
+                    <p><strong>Transaction Hash:</strong></p>
+                    <div class="tx-hash">${result.transaction_hash}</div>
+                    <p><strong>Block Number:</strong> ${result.block_number}</p>
+                    <p><strong>Gas Used:</strong> ${result.gas_used}</p>
+                    <p><strong>Product Hash:</strong> ${result.product_hash}</p>
+                    
+                    <div style="margin-top: 20px;">
+                        <button onclick="generateQR('${result.transaction_hash}')">🎯 Generate QR Code</button>
+                        <button onclick="copyTxHash('${result.transaction_hash}')">📋 Copy Transaction Hash</button>
+                        <button onclick="verifyProduct('${result.transaction_hash}')">🔍 Test Verification</button>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('registrationResult').innerHTML = resultHTML;
+        }
+
+        function generateQR(txHash) {
+            const verificationUrl = `${window.location.origin}/consumer?tx=${txHash}`;
+            const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=${encodeURIComponent(verificationUrl)}`;
+            
+            const qrHTML = `
+                <div style="text-align: center; margin: 20px 0; padding: 20px; background: white; border-radius: 10px; border: 2px solid #27ae60;">
+                    <h4>📱 QR Code for Product Verification</h4>
+                    <img src="${qrUrl}" alt="QR Code" style="border: 2px solid #27ae60; border-radius: 10px; margin: 10px;">
+                    <p><strong>Scan this QR code to verify product on blockchain</strong></p>
+                    <p><small>Transaction: ${txHash.substring(0, 20)}...</small></p>
+                    <div style="margin-top: 15px;">
+                        <button onclick="downloadQR('${qrUrl}', '${txHash}')">💾 Download QR</button>
+                        <button onclick="printQR()">🖨️ Print QR</button>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('registrationResult').innerHTML += qrHTML;
+        }
+
+        function downloadQR(qrUrl, txHash) {
+            const link = document.createElement('a');
+            link.href = qrUrl;
+            link.download = `blockchain-product-qr-${txHash.substring(0, 10)}.png`;
+            link.target = '_blank';
+            link.click();
+        }
+
+        function printQR() {
+            window.print();
+        }
+
+        function copyTxHash(txHash) {
+            navigator.clipboard.writeText(txHash).then(() => {
+                alert('✅ Transaction hash copied to clipboard!');
+            }).catch(() => {
+                prompt('Copy this transaction hash:', txHash);
+            });
+        }
+
+        function verifyProduct(txHash) {
+            const verificationUrl = `/consumer?tx=${txHash}`;
+            window.open(verificationUrl, '_blank');
+        }
+
+        function showStatus(elementId, message, type) {
+            const element = document.getElementById(elementId);
+            const statusClass = type === 'success' ? 'success' : type === 'error' ? 'error' : 'info';
+            element.innerHTML = `<div class="status ${statusClass}">${message}</div>`;
+        }
+
+        // Initialize on page load
+        window.onload = function() {
+            console.log('🚀 Initializing Blockchain Product Authentication System...');
+            checkBlockchainStatus();
+        };
+
+        // Auto-refresh blockchain status every 30 seconds
+        setInterval(checkBlockchainStatus, 30000);
+    </script>
+</body>
+</html>

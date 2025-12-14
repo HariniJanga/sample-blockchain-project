@@ -1,0 +1,12 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\config",
+    "\\static",
+    "\\static\\css",
+    "\\static\\js",
+    "\\templates"
+  ],
+  "SelectedNode": "\\auth_service.py",
+  "PreviewInSolutionExplorer": false
+}

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+    <style>
+        /* Add your preferred styles here */
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <h2>Register</h2>
+        <form method="POST" action="/register">
+            <label for="username">Username:</label>
+            <input type="text" name="username" required>
+            <label for="password">Password:</label>
+            <input type="password" name="password" required>
+            <label for="role">Register as:</label>
+            <select name="role" required>
+                <option value="customer">Customer</option>
+                <option value="manufacturer">Manufacturer</option>
+            </select>
+            <button type="submit">Register</button>
+        </form>
+        <p>Already have an account? <a href="customer_login.html">Login here</a></p>
+    </div>
+</body>
+</html> 

@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.env
+
+# Node modules
+node_modules/
+
+# VS Code
+.vscode/settings.json
+
+# Google Cloud
+.gcloud/
+
+# Local development
+local_config.json
+test_data/
+
+# Logs
+*.log

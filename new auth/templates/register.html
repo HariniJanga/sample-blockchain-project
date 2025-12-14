@@ -1,0 +1,248 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Product Authentication System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .register-container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+            .logo h1 {
+                color: #2c3e50;
+                font-size: 2rem;
+                margin-bottom: 10px;
+            }
+
+            .logo p {
+                color: #7f8c8d;
+                font-size: 1rem;
+            }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+            input:focus {
+                outline: none;
+                border-color: #667eea;
+                box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            }
+
+        .btn {
+            width: 100%;
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+            color: white;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+            margin-bottom: 20px;
+        }
+
+            .btn:hover {
+                transform: translateY(-2px);
+            }
+
+        .links {
+            text-align: center;
+        }
+
+            .links a {
+                color: #667eea;
+                text-decoration: none;
+                font-weight: 600;
+            }
+
+                .links a:hover {
+                    text-decoration: underline;
+                }
+
+        .alert {
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+            .alert.success {
+                background: #d4edda;
+                color: #155724;
+                border: 1px solid #c3e6cb;
+            }
+
+            .alert.error {
+                background: #f8d7da;
+                color: #721c24;
+                border: 1px solid #f5c6cb;
+            }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .requirements {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+            .requirements h4 {
+                color: #495057;
+                margin-bottom: 10px;
+            }
+
+            .requirements ul {
+                list-style: none;
+                padding: 0;
+            }
+
+            .requirements li {
+                color: #6c757d;
+                margin-bottom: 5px;
+            }
+
+                .requirements li:before {
+                    content: "• ";
+                    color: #667eea;
+                    margin-right: 5px;
+                }
+
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <div class="logo">
+            <h1>📝 Manufacturer Registration</h1>
+            <p>Join the Blockchain Authentication Network</p>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert {{ category }}">{{ message }}</div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        <div class="requirements">
+            <h4>Registration Requirements:</h4>
+            <ul>
+                <li>Valid company information</li>
+                <li>Unique username and email</li>
+                <li>Strong password (min 8 characters)</li>
+                <li>Agreement to blockchain terms</li>
+            </ul>
+        </div>
+
+        <form method="POST" id="registerForm">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="username">Username *</label>
+                    <input type="text" id="username" name="username" required placeholder="Choose username">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email *</label>
+                    <input type="email" id="email" name="email" required placeholder="your@email.com">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="company_name">Company Name *</label>
+                <input type="text" id="company_name" name="company_name" required placeholder="Your Company Ltd.">
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password *</label>
+                <input type="password" id="password" name="password" required placeholder="Create strong password" minlength="8">
+            </div>
+
+            <div class="form-group">
+                <label for="confirm_password">Confirm Password *</label>
+                <input type="password" id="confirm_password" name="confirm_password" required placeholder="Confirm your password">
+            </div>
+
+            <button type="submit" class="btn">🚀 Create Account</button>
+        </form>
+
+        <div class="links">
+            <p>Already have an account? <a href="{{ url_for('login') }}">Login here</a></p>
+            <p><a href="{{ url_for('consumer_portal') }}">Consumer Portal</a></p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm_password').value;
+
+            if (password !== confirmPassword) {
+                e.preventDefault();
+                alert('❌ Passwords do not match!');
+                return false;
+            }
+
+            if (password.length < 8) {
+                e.preventDefault();
+                alert('❌ Password must be at least 8 characters long!');
+                return false;
+            }
+        });
+    </script>
+</body>
+</html>

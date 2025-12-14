@@ -1,0 +1,35 @@
+{
+  "admin": {
+    "username": "admin",
+    "email": "admin@example.com",
+    "company_name": "Admin Company",
+    "password": "83a523d943187a4dab0496edb198e217685a8583bdf3cf09ce1d956b4f513cd8",
+    "salt": "4812581ece12e61963bb5980622360ae998d39689ad760d051d7e430bc1b1e5b",
+    "role": "manufacturer",
+    "created_at": "2025-07-18T20:17:36.852857",
+    "last_login": null,
+    "products_registered": 0
+  },
+  "sreepranav": {
+    "username": "sreepranav",
+    "email": "sreepranavguni@gmail.com",
+    "company_name": "nike",
+    "password": "3d3d74ac1337e586016471c131b727de3235d964db9b912ab10cd59307e13e03",
+    "salt": "cc6da8da62e9f10f4abb2870b3b4c1b61a1f8d95e0f3fc07d052c0de98e91106",
+    "role": "manufacturer",
+    "created_at": "2025-07-18T20:18:58.886641",
+    "last_login": null,
+    "products_registered": 0
+  },
+  "pranav": {
+    "username": "pranav",
+    "email": "sripranav556@gmail.com",
+    "company_name": "vp",
+    "password": "9e2234013eb207627c0523691b17f9042d6f112082f0b863f2cf755ac8bae4d6",
+    "salt": "efec10a7bf7e6b05e7e10ee819c5ef8a049da22cadd04c4ee4de7c86d0a443df",
+    "role": "manufacturer",
+    "created_at": "2025-07-19T14:32:09.965060",
+    "last_login": "2025-07-19T15:13:04.826665",
+    "products_registered": 2
+  }
+}
